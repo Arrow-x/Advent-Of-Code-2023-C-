@@ -1,29 +1,19 @@
 ﻿string data = Directory.GetCurrentDirectory() + @"/data/input";
 if (File.Exists(data) == false) return;
 
-string? line;
 int total = 0;
-var cards = new List<List<string>>();
+string[] rawCards = File.ReadLines(data).ToArray<string>();
+int[] cardsCounts = new int[rawCards.Length];
+Array.Fill(cardsCounts, 1);
 
-using (var fs = File.OpenText(data))
+for (int cardIdx = 0; cardIdx < rawCards.Length; cardIdx++)
 {
-    while ((line = fs.ReadLine()) != null)
+    var newScratchs = MangageGame(rawCards[cardIdx]);
+    if (cardIdx + newScratchs < cardsCounts.Length)
     {
-        var newLine = new List<string>() { line };
-        cards.Add(newLine);
-    }
-}
-for (int cardIdx = 0; cardIdx < cards.Count; cardIdx++)
-{
-    foreach (var card in cards[cardIdx])
-    {
-        var newScratchs = MangageGame(card);
-        if (cardIdx + newScratchs < cards.Count)
+        for (int i = 1; i <= newScratchs; i++)
         {
-            for (int i = 1; i <= newScratchs; i++)
-            {
-                cards[cardIdx + i].Add(cards[cardIdx + i][0]);
-            }
+            cardsCounts[cardIdx + i] += cardsCounts[cardIdx];
         }
     }
 }
@@ -48,8 +38,8 @@ int MangageGame(string inputLine)
     }
     return wins;
 }
-foreach (var c in cards)
+foreach (var c in cardsCounts)
 {
-    total += c.Count;
+    total += c;
 }
 Console.WriteLine(total);
