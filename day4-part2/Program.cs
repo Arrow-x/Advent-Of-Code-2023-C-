@@ -1,7 +1,6 @@
 ﻿string data = Directory.GetCurrentDirectory() + @"/data/input";
 if (File.Exists(data) == false) return;
 
-int total = 0;
 string[] rawCards = File.ReadLines(data).ToArray<string>();
 int[] cardsCounts = new int[rawCards.Length];
 Array.Fill(cardsCounts, 1);
@@ -38,8 +37,4 @@ int MangageGame(string inputLine)
     }
     return wins;
 }
-foreach (var c in cardsCounts)
-{
-    total += c;
-}
-Console.WriteLine(total);
+Console.WriteLine(cardsCounts.Sum());
