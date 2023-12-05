@@ -1,28 +1,22 @@
 ﻿string data = Directory.GetCurrentDirectory() + @"/data/input";
-if (File.Exists(data) == false) return;
-string? line;
-var input = new List<string>();
-using (var fs = File.OpenText(data))
-{
-    while ((line = fs.ReadLine()) != null)
-    {
-        input.Add(line);
-    }
-}
+if (File.Exists(data) == false)
+    return;
 
+var input = File.ReadLines(data).ToArray<string>();
 int total = 0;
+
 string lastLine = "";
 string currentLine = "";
 string nextLine = "";
 
-for (int lineIdx = 0; lineIdx < input.Count; lineIdx++)
+for (int lineIdx = 0; lineIdx < input.Length; lineIdx++)
 {
     currentLine = input[lineIdx];
     if (lineIdx - 1 >= 0)
     {
         lastLine = input[lineIdx - 1];
     }
-    if (lineIdx + 1 < input.Count)
+    if (lineIdx + 1 < input.Length)
     {
         nextLine = input[lineIdx + 1];
     }
@@ -32,7 +26,8 @@ for (int lineIdx = 0; lineIdx < input.Count; lineIdx++)
         int connectedPartsScore = 1;
         if (currentLine[charIdx] == '*')
         {
-            var founds = CheckAround(ref charIdx, ref currentLine, ref nextLine, ref lastLine);
+            var founds =
+                CheckAround(ref charIdx, ref currentLine, ref nextLine, ref lastLine);
             if (founds.Count > 1)
             {
                 foreach (var m in founds)
@@ -71,7 +66,6 @@ string CheckNumbers(int idx, ref string line)
             break;
         }
         foundNumber += line[index];
-
     }
     for (int index = idx - 1; index >= 0; index--)
     {
@@ -83,48 +77,65 @@ string CheckNumbers(int idx, ref string line)
     }
     return foundNumber;
 }
-List<string> CheckAround(ref int charIdx, ref string currentLine, ref string nextLine, ref string lastLine)
+List<string> CheckAround(ref int charIdx, ref string currentLine,
+                         ref string nextLine, ref string lastLine)
 {
     var foundNumbers = new List<string>();
+    int maxNumbers = 1;
     if (lastLine != "")
     {
-        if (charIdx - 1 >= 0)
+        if (Char.IsDigit(lastLine[charIdx]) == false)
+        {
+            maxNumbers = 2;
+        }
+        if (charIdx - 1 >= 0 && maxNumbers > 0)
         {
             if (CheckSymbol(lastLine[charIdx - 1]) == true)
             {
                 foundNumbers.Add(CheckNumbers(charIdx - 1, ref lastLine));
+                maxNumbers -= 1;
             }
         }
-        if (CheckSymbol(lastLine[charIdx]) == true)
+        if (CheckSymbol(lastLine[charIdx]) == true && maxNumbers > 0)
         {
             foundNumbers.Add(CheckNumbers(charIdx, ref lastLine));
+            maxNumbers -= 1;
         }
-        if (charIdx + 1 < lastLine.Length)
+        if (charIdx + 1 < lastLine.Length && maxNumbers > 0)
         {
             if (CheckSymbol(lastLine[charIdx + 1]) == true)
             {
                 foundNumbers.Add(CheckNumbers(charIdx + 1, ref lastLine));
+                maxNumbers -= 1;
             }
         }
     }
     if (nextLine != "")
     {
-        if (charIdx - 1 >= 0)
+        maxNumbers = 1;
+        if (Char.IsDigit(nextLine[charIdx]) == false)
+        {
+            maxNumbers = 2;
+        }
+        if (charIdx - 1 >= 0 && maxNumbers > 0)
         {
             if (CheckSymbol(nextLine[charIdx - 1]) == true)
             {
                 foundNumbers.Add(CheckNumbers(charIdx - 1, ref nextLine));
+                maxNumbers -= 1;
             }
         }
-        if (CheckSymbol(nextLine[charIdx]) == true)
+        if (CheckSymbol(nextLine[charIdx]) == true && maxNumbers > 0)
         {
             foundNumbers.Add(CheckNumbers(charIdx, ref nextLine));
+            maxNumbers -= 1;
         }
-        if (charIdx + 1 < nextLine.Length)
+        if (charIdx + 1 < nextLine.Length && maxNumbers > 0)
         {
             if (CheckSymbol(nextLine[charIdx + 1]) == true)
             {
                 foundNumbers.Add(CheckNumbers(charIdx + 1, ref nextLine));
+                maxNumbers -= 1;
             }
         }
     }
@@ -134,7 +145,6 @@ List<string> CheckAround(ref int charIdx, ref string currentLine, ref string nex
         {
             foundNumbers.Add(CheckNumbers(charIdx + 1, ref currentLine));
         }
-
     }
     if (charIdx - 1 >= 0)
     {
@@ -142,9 +152,7 @@ List<string> CheckAround(ref int charIdx, ref string currentLine, ref string nex
         {
             foundNumbers.Add(CheckNumbers(charIdx - 1, ref currentLine));
         }
-
     }
-    foundNumbers = foundNumbers.Distinct().ToList();
     return foundNumbers;
 }
 Console.WriteLine(total);
