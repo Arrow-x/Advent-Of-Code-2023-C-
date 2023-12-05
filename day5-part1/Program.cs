@@ -64,7 +64,7 @@ foreach (var line in lines)
     splits.Add(PrseLine(line.Trim()));
 }
 
-var resaults = new List<uint>();
+uint resault = 0;
 foreach (var seed in seeds)
 {
     var soil = CheckRange(seed, seedToSoil);
@@ -74,7 +74,10 @@ foreach (var seed in seeds)
     var temp = CheckRange(light, lightToTemperature);
     var hum = CheckRange(temp, temperatureToHumidity);
     var loc = CheckRange(hum, humidityToLocation);
-    resaults.Add(loc);
+    if (resault == 0 || loc < resault)
+    {
+        resault = loc;
+    }
 }
 uint CheckRange(uint seed, List<uint[]> map)
 {
@@ -96,4 +99,4 @@ uint[] PrseLine(string inputLine)
     return inputLine.Split(" ", splitOptions).Select(x => uint.Parse(x.ToString())).ToArray<uint>();
 }
 
-Console.WriteLine(resaults.Min());
+Console.WriteLine(resault);
