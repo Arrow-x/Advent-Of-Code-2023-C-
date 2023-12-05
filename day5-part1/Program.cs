@@ -84,7 +84,7 @@ uint CheckRange(uint seed, List<uint[]> map)
     uint indexed = seed;
     foreach (var idx in map)
     {
-        if (seed >= idx[1] && seed <= idx[1] + idx[2])
+        if (seed >= idx[1] && seed < idx[1] + idx[2])
         {
             indexed = seed - idx[1] + idx[0];
             break;
