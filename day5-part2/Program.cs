@@ -70,7 +70,6 @@ uint million = 1000000;
 
 for (int s = 0; s < seeds.Length; s += 2)
 {
-    Console.WriteLine($"Testing the range {seeds[s]} {seeds[s] + seeds[s + 1]}");
     (uint, uint, uint) localT = LowestRange(seeds[s], seeds[s] + seeds[s + 1], million, resault, lowestRange);
     if (localT.Item1 < resault || resault == 0)
     {
@@ -79,7 +78,7 @@ for (int s = 0; s < seeds.Length; s += 2)
         lowestRange[1] = localT.Item3;
     }
 }
-Console.WriteLine($"best astimate is {resault} in Range: [{lowestRange[0]}, {lowestRange[1]}]");
+
 for (uint step = million; step >= 1; step /= 10)
 {
     (uint, uint, uint) localT = LowestRange(lowestRange[0], lowestRange[1], step, resault, lowestRange);
@@ -106,7 +105,7 @@ for (uint step = million; step >= 1; step /= 10)
         var temp = CheckRange(light, lightToTemperature);
         var hum = CheckRange(temp, temperatureToHumidity);
         var loc = CheckRange(hum, humidityToLocation);
-        if (localLowest == 0 || loc <= localLowest)
+        if (localLowest == 0 || loc < localLowest)
         {
             localRange[0] = seed - step;
             localRange[1] = seed - 1;
@@ -124,7 +123,7 @@ uint CheckRange(uint seed, List<uint[]> map)
     uint indexed = seed;
     foreach (var idx in map)
     {
-        if (seed >= idx[1] && seed <= idx[1] + idx[2])
+        if (seed >= idx[1] && seed < idx[1] + idx[2])
         {
             indexed = seed - idx[1] + idx[0];
             break;
