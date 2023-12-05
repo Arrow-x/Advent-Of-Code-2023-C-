@@ -6,6 +6,7 @@
     <RootNamespace>day4_part2</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PublishAot>true</PublishAot>
   </PropertyGroup>
 
 </Project>
