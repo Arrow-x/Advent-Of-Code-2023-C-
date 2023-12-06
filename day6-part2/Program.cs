@@ -1,16 +1,11 @@
 ﻿string data = Directory.GetCurrentDirectory() + @"/data/input";
 if (File.Exists(data) == false) return;
-
 var lines = File.ReadLines(data).ToArray<string>();
+
 var splitOptions = StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries;
-var raceTimes = long.Parse(lines[0].Split(":", splitOptions)[1].Replace(" ", string.Empty));
-var recordDistances = long.Parse(lines[1].Split(":", splitOptions)[1].Replace(" ", string.Empty));
-long raceRecord = 0;
-for (long time = 0; time <= raceTimes; time++)
-{
-    if (time * (raceTimes - time) > recordDistances)
-    {
-        raceRecord += 1;
-    }
-}
-Console.WriteLine(raceRecord);
+var raceTime = long.Parse(lines[0].Split(":", splitOptions)[1].Replace(" ", string.Empty));
+var recordDistance = long.Parse(lines[1].Split(":", splitOptions)[1].Replace(" ", string.Empty));
+
+var min = ((long)(raceTime + Math.Sqrt(Math.Pow(raceTime, 2) - (4 * recordDistance)) / -2));
+var plus = ((long)(raceTime - Math.Sqrt(Math.Pow(raceTime, 2) - (4 * recordDistance)) / -2));
+Console.WriteLine($"{plus - min}");
