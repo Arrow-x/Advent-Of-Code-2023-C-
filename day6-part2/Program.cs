@@ -8,4 +8,4 @@ var recordDistance = long.Parse(lines[1].Split(":", splitOptions)[1].Replace(" "
 
 var min = ((long)(raceTime + Math.Sqrt(Math.Pow(raceTime, 2) - (4 * recordDistance)) / -2));
 var plus = ((long)(raceTime - Math.Sqrt(Math.Pow(raceTime, 2) - (4 * recordDistance)) / -2));
-Console.WriteLine($"{plus - min}");
+Console.WriteLine($"{(plus - 1) - (min + 1)}");
