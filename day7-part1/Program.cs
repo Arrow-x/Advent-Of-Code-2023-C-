@@ -86,8 +86,10 @@ bool AddToList((int[] card, int win)input, List<(int[] card, int win)> list,
     }
     for (int listIdx = start; listIdx < list.Count; listIdx++) {
         if (cardIdx > 0) {
-            if (input.card[cardIdx - 1] != list[listIdx].card[cardIdx - 1]) {
-                return false;
+            for (int pastCard = cardIdx - 1; pastCard >= 0; pastCard--) {
+                if (input.card[pastCard] != list[listIdx].card[pastCard]) {
+                    return false;
+                }
             }
         }
         if (input.card[cardIdx] < list[listIdx].card[cardIdx]) {
