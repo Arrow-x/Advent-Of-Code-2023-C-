@@ -4,13 +4,13 @@ if (File.Exists(data) == false)
 var lines = File.ReadLines(data);
 var splitOptions = StringSplitOptions.TrimEntries;
 
-var highCard = new List<(int[] card, int win, string raw_card)>();
-var onePair = new List<(int[] card, int win, string raw_card)>();
-var twoPair = new List<(int[] card, int win, string raw_card)>();
-var threeOfKind = new List<(int[] card, int win, string raw_card)>();
-var fullHouse = new List<(int[] card, int win, string raw_card)>();
-var fourOfKind = new List<(int[] card, int win, string raw_card)>();
-var fiveOfKind = new List<(int[] card, int win, string raw_card)>();
+var highCard = new List<(int[] card, int win)>();
+var onePair = new List<(int[] card, int win)>();
+var twoPair = new List<(int[] card, int win)>();
+var threeOfKind = new List<(int[] card, int win)>();
+var fullHouse = new List<(int[] card, int win)>();
+var fourOfKind = new List<(int[] card, int win)>();
+var fiveOfKind = new List<(int[] card, int win)>();
 
 var indexesChecked = new List<int>();
 foreach (var line in lines) {
@@ -61,7 +61,7 @@ foreach (var line in lines) {
                 break;
         }
     }
-    var resault = (valueCard, wining, rawCard);
+    var resault = (valueCard, wining);
     if (pairs == 0 && threes == 0 && fours == 0 && fives == 0) {
         AddToList(resault, highCard);
     } else if (pairs == 1 && threes == 0) {
@@ -78,8 +78,7 @@ foreach (var line in lines) {
         AddToList(resault, fiveOfKind);
     }
 }
-bool AddToList((int[] card, int win, string raw_card)input,
-               List<(int[] card, int win, string raw_card)> list,
+bool AddToList((int[] card, int win)input, List<(int[] card, int win)> list,
                int cardIdx = 0, int start = 0) {
     if (list.Count == 0) {
         list.Add(input);
@@ -108,10 +107,10 @@ bool AddToList((int[] card, int win, string raw_card)input,
     list.Add(input);
     return true;
 }
-var cardWinTypes = new List<(int[] card, int win, string raw_card)>[7] {
-    highCard,  onePair,    twoPair,   threeOfKind,
-    fullHouse, fourOfKind, fiveOfKind
-};
+var cardWinTypes =
+    new List<(int[] card, int win)>[7] { highCard,    onePair,   twoPair,
+                                         threeOfKind, fullHouse, fourOfKind,
+                                         fiveOfKind };
 // Console.WriteLine($@"High Cards: {highCard.Count}, One Pair {onePair.Count},
 // two Pairs {twoPair.Count}, Three Of Kind {threeOfKind.Count}, Full House:
 // {fullHouse.Count}, Four Of Kind {fourOfKind.Count}, Five Of Kind
@@ -122,7 +121,7 @@ foreach (var type in cardWinTypes) {
     for (int card = type.Count - 1; card >= 0; card--) {
         var _currentWin = type[card].win;
         // Console.WriteLine(
-        //     $"{type[card].raw_card}: {type[card].win} * {rankIdx}");
+        //     $"{{type[card].win} * {rankIdx}");
         score += rankIdx * type[card].win;
         rankIdx++;
     }
